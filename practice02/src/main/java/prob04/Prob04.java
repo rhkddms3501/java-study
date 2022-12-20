@@ -10,12 +10,15 @@ public class Prob04 {
 	}
 	
 	public static char[] reverse(String str) {
+		char temp = ' ';
 		/* 코드를 완성합니다 */
-		
-		//사용
 		char[] result = str.toCharArray();
 		
-//		str.charAt(0);
+		for(int i = 0; i < str.length()/2; i++) {
+			temp = result[i];
+			result[i] = result[str.length()-i-1];
+			result[str.length()-i-1] = temp;
+		}
 		return result;
 	}
 

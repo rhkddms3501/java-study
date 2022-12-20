@@ -7,11 +7,10 @@ public class Prob1 {
 		Scanner scanner = new Scanner( System.in );
 		
 		/* 코드 작성 */
-		System.out.println("수를 입력 하세요 : ");
+		System.out.print("수를 입력 하세요 : ");
 		int number = scanner.nextInt();
 		
-		System.out.println(number);
-		
+		if(number % 3 == 0) System.out.println("3의 배수입니다.");
 		
 		scanner.close();
 	}

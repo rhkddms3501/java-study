@@ -10,11 +10,23 @@ public class Prob3 {
 
 		/* 코드 작성 */
 		while(true) {
-			System.out.println("수를 입력 하세요 : ");
+			System.out.print("숫자를 입력 하세요 : ");
 			int number = scanner.nextInt();
+			int result = 0;
 			
-			System.out.println(number);
+			if(number % 2 == 1) {
+				for(int i = 1; i <= number; i += 2 ) {
+					result += i;
+				}
+			}else {
+				for(int i = 2; i <= number; i += 2 ) {
+					result += i;
+				}
+			}
+			System.out.println("결과 값 : " + result);
+			System.out.println();
 		}
+		
 //		scanner.close();
 	}
 }

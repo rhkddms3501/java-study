@@ -15,13 +15,16 @@ public class Prob03 {
 	}
 
 	private static void replaceSpace(char[] c) {
-
-		
+		for(int i = 0; i < c.length; i++) {
+			if(c[i] == ' ') c[i] = ',';
+		}
 	}
 
 	private static void printCharArray(char[] c) {
-
-		
+		for(int i = 0; i < c.length; i++) {
+			System.out.print(c[i]);
+		}
+		System.out.println();
 	}
 	
 	
