@@ -7,21 +7,25 @@ public class Goods {
 	private int countStock;
 	private int countSold;
 	
-	// 원래 생성자도 있어야한다.
-	// 근데 생성자 안 써도 알아서 넣어 준것.
 	public Goods() {
 //		클래스 실행마다 countOfGoods 증가 
 //		Goods.countOfGoods = Goods.countOfGoods + 1;
 //		같은 클래스에서는 생략 가능
 		countOfGoods = countOfGoods + 1;
 	}
+	public Goods(String name, int price, int countStock, int countSold) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.countStock = countStock;
+		this.countSold = countSold;
+		
+		countOfGoods = countOfGoods + 1;
+	}
 	
 	public int calcDiscountPrice(float discountRate) {
 		return (int)(price * discountRate);
 	}
-	
-	
-	
 	// 자기 정보 출력
 	public void printInfo() {
 		System.out.println("name : " + name + ", " + "price : " + price + ", " 

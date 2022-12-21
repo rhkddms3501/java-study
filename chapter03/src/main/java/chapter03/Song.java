@@ -10,7 +10,6 @@ public class Song {
 	
 //	생성자는 안적으면 자동으로 넣어줌
 //	public Song() {
-//		super();
 //		this.title = title;
 //		this.artist = artist;
 //		this.album = album;
@@ -18,10 +17,32 @@ public class Song {
 //		this.track = track;
 //		this.year = year;
 //	}
+	
+	public Song(String title, String artist) {
+		this(title, artist, " ", " ", 0, 0);
+		System.out.println("some codes6");
+			
+	}
+
+	public Song(String title, String artist, String album, String composer, int track, int year) {
+		this.title = title;
+		this.artist = artist;
+		this.album = album;
+		this.composer = composer;
+		this.track = track;
+		this.year = year;
+		
+		System.out.println("..... somecode1");
+		System.out.println("..... somecode2");
+		System.out.println("..... somecode3");
+		System.out.println("..... somecode4");
+		System.out.println("..... somecode5");
+	}
 
 	public String getTitle() {
 		return title;
 	}
+
 
 	public void setTitle(String title) {
 		this.title = title;

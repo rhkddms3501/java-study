@@ -22,7 +22,12 @@ public class GoodsApp {
 		System.out.println(Goods.countOfGoods);
 		
 		camera.setPrice(4000000);
-		System.out.println(camera.calcDiscountPrice((float)4.5));
+		System.out.println(camera.calcDiscountPrice((float)0.5));
+		
+		
+		//	TV 생성
+		Goods tv = new Goods("TV", 1200000, 10, 20);
+		tv.printInfo();
 	}
 
 }
