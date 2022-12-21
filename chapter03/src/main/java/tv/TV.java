@@ -2,7 +2,7 @@ package tv;
 
 public class TV {
 	private int channel; 	//	1 ~ 255
-	private int volume; 	//	1 ~ 255
+	private int volume; 	//	0 ~ 100
 	private boolean power;
 	
 	
@@ -45,8 +45,8 @@ public class TV {
 	}
 	
 	public void volume(int volume) {
-		if(volume > 255) this.volume = volume - 255;
-		else if(volume < 1) this.volume = volume + 255;
+		if(volume > 100) this.volume = 100;
+		else if(volume < 0) this.volume = 0;
 		else this.volume = volume;
 	}
 	
@@ -62,11 +62,12 @@ public class TV {
 	
 	public void status() {
 		if(this.power) {
-			System.out.println(
-					"TV [ power =" + (power ? "on" : "off") + "," + 
-					"channel = " + channel + "," + 
-					"volume = " + volume + "]");
+			
 		}
+		System.out.println(
+				"TV [ power =" + (power ? "on" : "off") + "," + 
+				"channel = " + channel + "," + 
+				"volume = " + volume + "]");
 	}
 
 }
