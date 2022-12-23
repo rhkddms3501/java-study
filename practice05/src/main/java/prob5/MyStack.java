@@ -1,43 +1,38 @@
 package prob5;
 
+import java.util.Arrays;
+
 public class MyStack {
-		private int lenght;
-		private String[] buffer;
-		
+	private String[] buffer;
+	private int current;
+	
 	public MyStack(int i) {
-		this.lenght = i;
 		this.buffer = new String[i];
+		this.current = -1;
 	}
 
 	public boolean isEmpty() {
-		if(this.buffer[0] == null) return true;
-		return false;
+		return (current == -1);
 	}
-	public boolean isfull() {
-		if(this.buffer[lenght-1] != null) return true;
-		return false;
-	}
-	
-	public void push(String string) throws MyStackException {
-		if(!isfull()) {
-			for(int i = 0; i < this.lenght; i++) {
-				if(this.buffer[i] == null) this.buffer[i] = string;
+	public void push(String string) {
+			current++;
+			if(current >= buffer.length){
+				buffer = newBuffer(buffer);
 			}
-		}else {
-			throw new MyStackException();
-		}
+			buffer[current] = string;		
 	}
-	
 	public String pop() throws MyStackException {
-		if(!isEmpty()) {
-			for(int i = this.lenght; i >= 0; i--) {
-				if(this.buffer[i] != null) return this.buffer[i];
-			}
-		}else {
+		if(current < 0) {
 			throw new MyStackException();
 		}
-		return null;
+		String result = buffer[current];
+		buffer[current] = null;
+		current--;
+		return result;
 	}
-
-
+	private String[] newBuffer(String[] buffer) {
+		String[] newBuffer = new String[current+1];
+		newBuffer = Arrays.copyOf(buffer, buffer.length+1);
+		return newBuffer;
+	}	
 }
