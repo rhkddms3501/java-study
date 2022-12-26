@@ -3,7 +3,7 @@ package prob03;
 public class Money {
 	private Integer amount;
 	
-	public Money(int i) {
+	public Money(Integer i) {
 		this.amount = i;
 	}
 
