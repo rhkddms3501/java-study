@@ -23,20 +23,20 @@ public class TCPClient {
 			// 3. IO Stream 받아오기
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
-			
-			//4. 쓰기
+
+			// 4. 쓰기
 			String data = "Hello World";
 			os.write(data.getBytes("utf-8"));
-			
-			//5. 읽기
+
+			// 5. 읽기
 			byte[] buffer = new byte[256];
-			int readByteCount = is.read(buffer);	//blocking
-			if(readByteCount == -1) {
+			int readByteCount = is.read(buffer); // blocking
+			if (readByteCount == -1) {
 				// 서버가 정상적으로 종료( close() 호출 )
 				System.out.println("[client] closed by server");
 				return;
 			}
-			
+
 			data = new String(buffer, 0, readByteCount, "utf-8");
 			System.out.println("[client] received: " + data);
 
