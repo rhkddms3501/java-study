@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 
 public class KeyboardTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		BufferedReader br = null;
 		try {
 			// 1. 기반스트림 (표준입력, stdin, System.in)

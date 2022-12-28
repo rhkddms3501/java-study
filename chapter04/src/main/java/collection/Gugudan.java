@@ -18,7 +18,7 @@ public class Gugudan {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(lValue, rValue)*Objects.hash(lValue, rValue);
+		return Objects.hash(lValue * rValue);
 	}
 
 	@Override
@@ -36,4 +36,3 @@ public class Gugudan {
 	//set사용..?
 
 }
-수정필요.

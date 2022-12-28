@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.douzone.paint.collection.MyStack;
-import com.douzone.paint.point.Point;
+import com.douzone.paint.i.Drawable;
 import com.douzone.paint.shape.Rect;
 import com.douzone.paint.shape.Shape;
 
@@ -14,13 +14,13 @@ public class GenericTest {
 		drawShape(new Rect());
 		//drawShape(new Point());
 		
-		MyStack<? extends Shape> s = null;
+		MyStack<? extends Shape> s1 = null;
 		MyStack<? super Shape> s2 = null;
 		
 		List<Rect> list1 = new ArrayList<>();
 		List<Shape> list2 = new ArrayList<>();
 		
-		MyStack<Point>s = new MyStack<>(20);
+		MyStack<Drawable> s = new MyStack<>(20);
 		
 		drawShapeLayer(list1, null);
 		drawShapeLayer(list2, s);
@@ -80,7 +80,7 @@ public class GenericTest {
 	
 	public static void drawShapeLayer(
 			List<? extends Shape> in, 			/*  Producer (데이터를 만든다.), Lower Bounded	*/
-			MyStack<? super Drawble> out) {		/* Consumer (데이터를 사용한다.), Upper Bounded	*/
+			MyStack<? super Drawable> out) {		/* Consumer (데이터를 사용한다.), Upper Bounded	*/
 		// 잘못된 사용
 		//	MyStack<? extends Shape> s1 = new MyStack<>(10);
 		//	s1.push(new Rect());

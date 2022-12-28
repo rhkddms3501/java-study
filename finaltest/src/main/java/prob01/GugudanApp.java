@@ -60,7 +60,7 @@ public class GugudanApp {
 			};
 		}
 		
-		Iterator iter = hs.iterator();
+		Iterator<Integer> iter = hs.iterator();
 		int num = 0;
 		while(iter.hasNext()) {
 			boardNumbers[num] = (int) iter.next();
