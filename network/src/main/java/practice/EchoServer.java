@@ -14,10 +14,7 @@ public class EchoServer {
 	public static void main(String[] args) {
 		ServerSocket serverSocket = null;
 		List<Writer> listWriters = new ArrayList<Writer>();
-		try {
-			
-			
-			
+		try {			
 			serverSocket = new ServerSocket();
 
 			serverSocket.bind(new InetSocketAddress("0.0.0.0", PORT));
@@ -28,10 +25,6 @@ public class EchoServer {
 				Socket socket = serverSocket.accept();
 				new EchoRequestHandler(socket, listWriters).start();
 			}
-			
-			
-			
-			
 			
 		} catch (IOException e) {
 			log("error:" + e);
