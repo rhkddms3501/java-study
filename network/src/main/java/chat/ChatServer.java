@@ -26,7 +26,7 @@ public class ChatServer {
 
 			// 3. 요청 대기
 			while (true) {
-				System.out.println("연결 대기중...");
+				System.out.println("클라이언트 연결 대기중...");
 				Socket socket = serverSocket.accept();
 				new ChatServerThread(socket, listWriters).start();
 			}
@@ -39,7 +39,7 @@ public class ChatServer {
 					System.out.println("서버 종료...");
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				log("error : " + e);
 			}
 		}
 	}

@@ -38,7 +38,8 @@ public class ChatServerThread extends Thread {
 
 			// 2. 스트림 얻기
 			bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8),
+					true);
 
 			// 3. 요청처리
 			while (true) {
@@ -55,7 +56,7 @@ public class ChatServerThread extends Thread {
 
 				// 4. 프로토콜 분석
 				String[] tokens = request.split(":");
-				
+
 				if ("join".equals(tokens[0])) {
 					doJoin(tokens[1], printWriter);
 				} else if ("message".equals(tokens[0])) {
@@ -65,10 +66,11 @@ public class ChatServerThread extends Thread {
 				} else {
 					System.out.println("에러 : 알수 없는 요청 ( " + tokens[0] + " )");
 				}
-
 			}
 		} catch (SocketException ex) {
-			log("error : " + ex);
+			//log("error : " + ex);
+			System.out.println("클라이언트로 부터 연결 끊김");
+			doQuit(printWriter);
 		} catch (IOException e) {
 			log("error : " + e);
 		} finally {
@@ -77,13 +79,13 @@ public class ChatServerThread extends Thread {
 					socket.close();
 				}
 			} catch (IOException ex) {
-				ex.printStackTrace();
+				log("error : " + ex);
 			}
 		}
 	}
 
 	private void doJoin(String nickName, Writer writer) {
-		
+
 		this.nickname = nickName;
 		String data = nickName + "님이 참여하였습니다.";
 		bradcast(data);
@@ -92,8 +94,8 @@ public class ChatServerThread extends Thread {
 		addWriter(writer);
 
 		// ack
-		printWriter.println("채팅방에 입장하였습니다.");
-		printWriter.flush();
+		printWriter.println("JOIN:OK");
+		//printWriter.flush();
 	}
 
 	private void addWriter(Writer writer) {
@@ -107,13 +109,13 @@ public class ChatServerThread extends Thread {
 			for (Writer writer : listWriters) {
 				PrintWriter printWriter = (PrintWriter) writer;
 				printWriter.println(data);
-				printWriter.flush();
+				//printWriter.flush();
 			}
 		}
 	}
 
 	private void doMessage(String data) {
-		String message = nickname + " : " + data;
+		String message = "[ " + nickname + " ] : " + data;
 		bradcast(message);
 	}
 
@@ -129,12 +131,13 @@ public class ChatServerThread extends Thread {
 			listWriters.remove(writer);
 		}
 	}
-	
+
 	private String decodedBase64(String input) {
-		byte[] decodedBytes = Base64.getDecoder().decode(input);		
-		return new String(decodedBytes);
+		byte[] decodedBytes = Base64.getDecoder().decode(input);
+		System.out.println(nickname + " : " + new String(decodedBytes, StandardCharsets.UTF_8));
+		return new String(decodedBytes, StandardCharsets.UTF_8);
 	}
-	
+
 	private void log(String message) {
 		System.out.println("[Server#" + getId() + "] " + message);
 	}

@@ -1,4 +1,5 @@
-package here.gui;
+package shb.gui;
+
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
@@ -10,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -18,50 +18,46 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class ChatWindow {
-
 	private Frame frame;
 	private Panel pannel;
 	private Button buttonSend;
 	private TextField textField;
 	private TextArea textArea;
-	
 	private String name;
-	private Socket socket;
-	
-	PrintWriter printWriter = null;
+
 	BufferedReader bufferedReader = null;
-	
+	PrintWriter printWriter = null;
+	private Socket socket;
+
 	public ChatWindow(String name, Socket socket) {
+		this.name = name;
+		this.socket = socket;
+
 		frame = new Frame(name);
 		pannel = new Panel();
 		buttonSend = new Button("Send");
 		textField = new TextField();
 		textArea = new TextArea(30, 80);
-		
-		this.name = name;
-		this.socket = socket;
 	}
 
 	public void show() {
 		// Button
 		buttonSend.setBackground(Color.GRAY);
 		buttonSend.setForeground(Color.WHITE);
-		buttonSend.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent actionEvent ) {
+		buttonSend.addActionListener(new ActionListener() {
+			// @Override
+			public void actionPerformed(ActionEvent actionEvent) {
 				sendMessage();
 			}
 		});
-		
-//		buttonSend.addActionListener((e) -> {
-//			
-//		});
+
+		// buttonSend.addActionListener((/*ActionEvent*/ e) -> {
+		// });
 
 		// Textfield
 		textField.setColumns(80);
@@ -69,11 +65,20 @@ public class ChatWindow {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char keyCode = e.getKeyChar();
-				if(keyCode == KeyEvent.VK_ENTER) {
+				if (keyCode == KeyEvent.VK_ENTER) {
 					sendMessage();
 				}
 			}
+
 		});
+
+//		textField.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//
+//			}
+//
+//		});
 
 		// Pannel
 		pannel.setBackground(Color.LIGHT_GRAY);
@@ -87,110 +92,96 @@ public class ChatWindow {
 
 		// Frame
 		frame.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				finish();
 			}
+
 		});
 		frame.setVisible(true);
 		frame.pack();
-		
+
 		// IOStream 받아오기
 		try {
-			bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
-			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "utf-8"), true);
-			
-			// ChatClientThread 생성하고 실행
+			bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8),
+					true);
+
+			// ChatClientThread 생성 & 실행
 			new ChatClientThread(socket).start();
-			
-			
-			
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
+
 	private void finish() {
-		//quit protocol 구현/
+		// quit pritocol 구현
+		printWriter.println("quit");
+
+		// clean-up
+		try {
+			if (socket != null && !socket.isClosed()) {
+				socket.close();
+			}
+		} catch (IOException e) {
+			System.out.println("error:" + e);
+		}
 		
-		
-		//clean-up
-		
-		
-		//exit java(Application)
+		// exit java(Application)
 		System.exit(0);
+
 	}
+
 	private void sendMessage() {
 		String message = textField.getText();
-		System.out.println("메세지 보내는 프로토콜 구현 : " + message );
+		System.out.println("메시지 프로토콜 구현 : " + message);
+
+
+		// ChatClientThread에서 서버로부터 받은 메시지가 있다 치고~
+		printWriter.println("message:" + base64Encoding(message));
+//		updateTextArea(name + " : " + message);
 		
-		if("quit".equals(message)) {
-			System.out.println("ChatWindow__sendMessage()__quit__입력");
-			printWriter.println("quit");
-			finish();
-		}else {
-			printWriter.println("message:" + encodedBase64(message));
-		}
 		
 		textField.setText("");
 		textField.requestFocus();
-		
-		
 	}
-	
 
 	private void updateTextArea(String message) {
 		textArea.append(message);
 		textArea.append("\n");
-		
 	}
-	
-	private String encodedBase64(String message) {
-		return Base64.getEncoder().encodeToString(message.getBytes(StandardCharsets.UTF_8));
-	}
-	
+
 	private class ChatClientThread extends Thread {
-		private BufferedReader bufferedReader;
-		private PrintWriter printWriter;
 		private Socket socket;
+
 		public ChatClientThread(Socket socket) {
 			this.socket = socket;
 		}
 
 		@Override
 		public void run() {
-			// String messgae = br.readLine();
-			//
-			//
-			
 			try {
-				bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
-				printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "utf-8"), true);
+				bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
 				
 				while (true) {
-					String data = bufferedReader.readLine();
+					String message = bufferedReader.readLine();
 
-					if (data == null) {
-						System.out.println("closed by client");
+					if (message == null) {
+						System.out.println("error");
 						break;
 					}
-					System.out.println(data);
-//					printWriter.println(data);
-					
-					// ChatClientThread 에서 서버로 부터 받은 메세지가 있다 치고~
-					updateTextArea(data);
+					System.out.println(message);
+					updateTextArea(message);
 				}
-				
-				
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("채팅종료");
 			}
-			
-			updateTextArea("안녕");
 		}
+	}
+
+	public static String base64Encoding(String message) {
+		String encodedString = Base64.getEncoder().encodeToString(message.getBytes(StandardCharsets.UTF_8));
+		return encodedString;
 	}
 }
