@@ -50,8 +50,6 @@ public class ChatServerThread extends Thread {
 					break;
 				} else if ("quit".equals(request)) {
 					System.out.println("클라이언트의 요청에 의한 종료");
-					doQuit(printWriter);
-					break;
 				}
 
 				// 4. 프로토콜 분석
@@ -63,6 +61,7 @@ public class ChatServerThread extends Thread {
 					doMessage(decodedBase64(tokens[1]));
 				} else if ("quit".equals(tokens[0])) {
 					doQuit(printWriter);
+					break;
 				} else {
 					System.out.println("에러 : 알수 없는 요청 ( " + tokens[0] + " )");
 				}
